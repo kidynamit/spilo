@@ -1,14 +1,22 @@
 steps:
 - name: 'gcr.io/cloud-builders/docker'
   dir: 'postgres-appliance'
-  entrypoint: 'bash'
   args:
-    - '-c'
-    - |
-      ./build.sh \
-        -t gcr.io/$PROJECT_ID/$REPO_NAME:$REVISION_ID \
-        -t gcr.io/$PROJECT_ID/$REPO_NAME:latest \
-        .
+    - build
+    - --build-arg
+    - COMPRESS=false
+    - --build-arg
+    - PGVERSION=12
+    - --tag
+    - gcr.io/$_PROJECT_ID/$_REPO_NAME:$_REVISION_ID
+    - --tag
+    - gcr.io/$_PROJECT_ID/$_REPO_NAME:latest
+    - --file
+    - Dockerfile
+    - --no-cache
+    - .
+  timeout: 1800s
 images:
-  - 'gcr.io/$PROJECT_ID/$REPO_NAME:$REVISION_ID'
-  - 'gcr.io/$PROJECT_ID/$REPO_NAME:latest'
+  - 'gcr.io/$_PROJECT_ID/$_REPO_NAME:$_REVISION_ID'
+  - 'gcr.io/$_PROJECT_ID/$_REPO_NAME:latest'
+timeout: 1800s
