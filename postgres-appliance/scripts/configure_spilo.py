@@ -888,7 +888,7 @@ def main():
                                 os.environ.get('PATRONI_CONFIGURATION', ''))
     user_config = yaml.load(env_config, Loader=Loader) or {}
     config_var_name = 'SPILO_CONFIGURATION' if 'SPILO_CONFIGURATION' in os.environ else 'PATRONI_CONFIGURATION'
-    if (not config_file and
+    if (config_file and
             os.path.isfile(config_file) and
             os.access(config_file, os.R_OK)):
         with open(config_file, 'r') as yaml_file:
