@@ -396,7 +396,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     && apt-cache depends patroni \
             | sed -n -e 's/.* Depends: \(python3-.\+\)$/\1/p' \
             | grep -Ev '^python3-(sphinx|etcd|consul|kazoo|kubernetes)' \
-            | xargs apt-get install -y ${BUILD_PACKAGES} \
+            | xargs apt-get install -y ${BUILD_PACKAGES} python3-distutils \
                                         python3-pystache python3-cachetools \
                                         python3-rsa python3-pyasn1-modules \
 \

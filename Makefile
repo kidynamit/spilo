@@ -16,7 +16,7 @@ postgres-appliance/scm-source.json:
 		"status": "$(STATUS)"\n\
 	}' > postgres-appliance/scm-source.json
 
-spilo.cloud_build: postgres-appliance/scm-source.json
+spilo.latest_build: clean postgres-appliance/scm-source.json
 	gcloud builds submit . \
 		--config contrib/cloudbuild-latest.yaml \
 		--substitutions _PROJECT_ID=$(PROJECT_ID),_REVISION_ID=$(REVISION_ID),_REPO_NAME=$(REPO_NAME) \
