@@ -8,15 +8,23 @@ steps:
     - --build-arg
     - PGVERSION=12
     - --tag
-    - gcr.io/$_PROJECT_ID/$_REPO_NAME:$_REVISION_ID
+    - eu.gcr.io/$_PROJECT_ID/$_REPO_NAME:$_REVISION_ID
     - --tag
-    - gcr.io/$_PROJECT_ID/$_REPO_NAME:latest
+    - eu.gcr.io/$_PROJECT_ID/$_REPO_NAME:latest
     - --file
     - Dockerfile
     - --no-cache
     - .
   timeout: 1800s
+- name: 'gcr.io/cloud-builders/docker'
+  args:
+    - push
+    - eu.gcr.io/$_PROJECT_ID/$_REPO_NAME:$_REVISION_ID
+- name: 'gcr.io/cloud-builders/docker'
+  args:
+    - push
+    - eu.gcr.io/$_PROJECT_ID/$_REPO_NAME:latest
 images:
-  - 'gcr.io/$_PROJECT_ID/$_REPO_NAME:$_REVISION_ID'
-  - 'gcr.io/$_PROJECT_ID/$_REPO_NAME:latest'
-timeout: 1800s
+  - 'eu.gcr.io/$_PROJECT_ID/$_REPO_NAME:$_REVISION_ID'
+  - 'eu.gcr.io/$_PROJECT_ID/$_REPO_NAME:latest'
+timeout: 2100s
