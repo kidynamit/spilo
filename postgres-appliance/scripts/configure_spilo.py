@@ -16,6 +16,12 @@ from six.moves.urllib_parse import urlparse
 from collections import defaultdict
 
 import yaml
+
+try:
+    from yaml import CLoader as Loader
+except ImportError:
+    from yaml import Loader
+
 import pystache
 import requests
 
@@ -877,7 +883,15 @@ def main():
     user_config = yaml.load(os.environ.get('SPILO_CONFIGURATION', os.environ.get('PATRONI_CONFIGURATION', ''))) or {}
     if not isinstance(user_config, dict):
         config_var_name = 'SPILO_CONFIGURATION' if 'SPILO_CONFIGURATION' in os.environ else 'PATRONI_CONFIGURATION'
-        raise ValueError('{0} should contain a dict, yet it is a {1}'.format(config_var_name, type(user_config)))
+        # attempt to load from file
+        config_file = os.environ.get('PATRONI_CONFIGURATION_FILE',
+                                     os.environ.get('SPILO_CONFIGURATION_FILE'))
+        if not config_file:
+            raise ValueError('{0} should contain a dict, yet it is a {1}'\
+                             .format(config_var_name, type(user_config)))
+        with open(config_file, 'r') as yaml_file:
+            user_config = yaml.load(yaml_file, Loader=Loader)
+            assert isinstance(user_config, dict)
 
     user_config_copy = deepcopy(user_config)
     config = deep_update(user_config_copy, config)
