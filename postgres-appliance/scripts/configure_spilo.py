@@ -879,19 +879,26 @@ def main():
 
     config = yaml.load(pystache_render(TEMPLATE, placeholders))
     config.update(get_dcs_config(config, placeholders))
-
-    user_config = yaml.load(os.environ.get('SPILO_CONFIGURATION', os.environ.get('PATRONI_CONFIGURATION', ''))) or {}
-    if not isinstance(user_config, dict):
-        config_var_name = 'SPILO_CONFIGURATION' if 'SPILO_CONFIGURATION' in os.environ else 'PATRONI_CONFIGURATION'
-        # attempt to load from file
-        config_file = os.environ.get('PATRONI_CONFIGURATION_FILE',
-                                     os.environ.get('SPILO_CONFIGURATION_FILE'))
-        if not config_file:
-            raise ValueError('{0} should contain a dict, yet it is a {1}'\
-                             .format(config_var_name, type(user_config)))
+    # attempt to load from file
+    config_file = os.environ.get('PATRONI_CONFIGURATION_FILE',
+                                 os.environ.get('SPILO_CONFIGURATION_FILE'))
+    config_file_name = 'PATRONI_CONFIGURATION_FILE' \
+        if 'PATRONI_CONFIGURATION_FILE' in os.environ else 'SPILO_CONFIGURATION_FILE'
+    env_config = os.environ.get('SPILO_CONFIGURATION',
+                                os.environ.get('PATRONI_CONFIGURATION', ''))
+    user_config = yaml.load(env_config, Loader=Loader) or {}
+    config_var_name = 'SPILO_CONFIGURATION' if 'SPILO_CONFIGURATION' in os.environ else 'PATRONI_CONFIGURATION'
+    if (not config_file and
+            os.path.isfile(config_file) and
+            os.access(config_file, os.R_OK)):
         with open(config_file, 'r') as yaml_file:
+            logging.info('Overriding environment configuration with "%s"', config_file)
+            config_var_name = config_file_name
             user_config = yaml.load(yaml_file, Loader=Loader)
-            assert isinstance(user_config, dict)
+
+    if not isinstance(user_config, dict):
+        raise ValueError('{0} should contain a dict, yet it is a {1}'\
+                         .format(config_var_name, type(user_config)))
 
     user_config_copy = deepcopy(user_config)
     config = deep_update(user_config_copy, config)
