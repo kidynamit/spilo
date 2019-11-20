@@ -2,29 +2,29 @@ steps:
 - name: 'gcr.io/cloud-builders/docker'
   dir: 'postgres-appliance'
   args:
-    - build
-    - --build-arg
-    - COMPRESS=false
-    - --build-arg
-    - PGVERSION=12
-    - --tag
-    - eu.gcr.io/$_PROJECT_ID/$_REPO_NAME:$_REVISION_ID
-    - --tag
-    - eu.gcr.io/$_PROJECT_ID/$_REPO_NAME:latest
-    - --file
-    - Dockerfile
-    - --no-cache
-    - .
+  - build
+  - --build-arg
+  - COMPRESS=false
+  - --build-arg
+  - PGVERSION=12
+  - --tag
+  - eu.gcr.io/$_PROJECT_ID/$_REPO_NAME:$_REVISION_ID
+  - --tag
+  - eu.gcr.io/$_PROJECT_ID/$_REPO_NAME:latest
+  - --file
+  - Dockerfile
+  - --no-cache
+  - .
   timeout: 1800s
 - name: 'gcr.io/cloud-builders/docker'
   args:
-    - push
-    - eu.gcr.io/$_PROJECT_ID/$_REPO_NAME:$_REVISION_ID
+  - push
+  - eu.gcr.io/$_PROJECT_ID/$_REPO_NAME:$_REVISION_ID
 - name: 'gcr.io/cloud-builders/docker'
   args:
-    - push
-    - eu.gcr.io/$_PROJECT_ID/$_REPO_NAME:latest
+  - push
+  - eu.gcr.io/$_PROJECT_ID/$_REPO_NAME:latest
 images:
-  - 'eu.gcr.io/$_PROJECT_ID/$_REPO_NAME:$_REVISION_ID'
-  - 'eu.gcr.io/$_PROJECT_ID/$_REPO_NAME:latest'
+- 'eu.gcr.io/$_PROJECT_ID/$_REPO_NAME:$_REVISION_ID'
+- 'eu.gcr.io/$_PROJECT_ID/$_REPO_NAME:latest'
 timeout: 2100s
