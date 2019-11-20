@@ -1,6 +1,6 @@
 REVISION_ID		:= 1.6.1-$(shell git rev-parse --short HEAD)
 PROJECT_ID		:= rehive-core
-REPO_NAME		:= spilo
+REPO_NAME		:= spilo-11
 
 REV				:=$(shell git rev-parse HEAD)
 URL				:=$(shell git config --get remote.origin.url)
@@ -21,6 +21,11 @@ spilo.cloud_build: postgres-appliance/scm-source.json
 		--config contrib/cloudbuild-latest.yaml \
 		--substitutions _PROJECT_ID=$(PROJECT_ID),_REVISION_ID=$(REVISION_ID),_REPO_NAME=$(REPO_NAME) \
 		--gcs-log-dir gs://rehive-core-cloudbuild-logs/$(REPO_NAME)/$(REVISION_ID)
+
+local.build:
+	cd postgres-appliance && \
+		./build.sh --build-arg COMPRESS=false --build-arg PGVERSION="12" \
+		-t $(REPO_NAME) --file Dockerfile --no-cache .
 
 clean:
 	rm postgres-appliance/scm-source.json
