@@ -4,7 +4,7 @@ steps:
   args:
   - build
   - --build-arg
-  - COMPRESS=false
+  - COMPRESS=true
   - --build-arg
   - PGVERSION=12
   - --tag
