@@ -20,7 +20,7 @@ spilo.latest_build: clean postgres-appliance/scm-source.json
 	gcloud builds submit . \
 		--config contrib/cloudbuild-latest.yaml \
 		--substitutions _PROJECT_ID=$(PROJECT_ID),_REVISION_ID=$(REVISION_ID),_REPO_NAME=$(REPO_NAME) \
-		--gcs-log-dir gs://rehive-core-cloudbuild-logs/$(REPO_NAME)/$(REVISION_ID)
+		--gcs-log-dir gs://$(PROJECT_ID)-cloudbuild-logs/$(REPO_NAME)/$(REVISION_ID)
 
 local.build:
 	cd postgres-appliance && \
