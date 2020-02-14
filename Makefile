@@ -1,5 +1,5 @@
-REVISION_ID		:= 1.6.1-$(shell git rev-parse --short HEAD)
-PROJECT_ID		:= rehive-core
+REVISION_ID		:= 1.6.2-build.$(shell git rev-parse --short HEAD)
+PROJECT_ID		:= rehive-services
 REPO_NAME		:= spilo-11
 
 REV				:=$(shell git rev-parse HEAD)
@@ -24,8 +24,24 @@ spilo.latest_build: clean postgres-appliance/scm-source.json
 
 local.build:
 	cd postgres-appliance && \
-		./build.sh --build-arg COMPRESS=false --build-arg PGVERSION="12" \
-		-t $(REPO_NAME) --file Dockerfile --no-cache .
+		./build.sh \
+		--build-arg WITH_PERL=false \
+		--build-arg COMPRESS=true \
+		--build-arg DEMO=false \
+		--build-arg PGVERSION=12 \
+		--build-arg PGOLDVERSIONS="9.6 11" \
+		--build-arg COMPRESS=true \
+		-t $(REPO_NAME) -t $(REPO_NAME):$(REVISION_ID) \
+		--file Dockerfile --no-cache .
+
+docker.build: local.build
+	docker tag $(REPO_NAME):$(REVISION_ID) rehive/$(REPO_NAME):$(REVISION_ID)
+	docker tag $(REPO_NAME):$(REVISION_ID) rehive/$(REPO_NAME):latest
+	docker push rehive/$(REPO_NAME):$(REVISION_ID)
+	docker push rehive/$(REPO_NAME):latest
+	git tag $(REVISION_ID) -m "Docker Release $(REVISION_ID)"
+	git push origin
+
 
 clean:
 	rm postgres-appliance/scm-source.json

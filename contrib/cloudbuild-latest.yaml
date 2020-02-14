@@ -4,9 +4,15 @@ steps:
   args:
   - build
   - --build-arg
+  - WITH_PERL=false
+  - --build-arg
   - COMPRESS=true
   - --build-arg
-  - PGVERSION=12
+  - DEMO=false
+  - --build-arg
+  - PGVERSION=9.6
+  - --build-arg
+  - PGOLDVERSIONS="11"
   - --tag
   - eu.gcr.io/$_PROJECT_ID/$_REPO_NAME:$_REVISION_ID
   - --tag
@@ -16,14 +22,6 @@ steps:
   - --no-cache
   - .
   timeout: 1800s
-- name: 'gcr.io/cloud-builders/docker'
-  args:
-  - push
-  - eu.gcr.io/$_PROJECT_ID/$_REPO_NAME:$_REVISION_ID
-- name: 'gcr.io/cloud-builders/docker'
-  args:
-  - push
-  - eu.gcr.io/$_PROJECT_ID/$_REPO_NAME:latest
 images:
 - 'eu.gcr.io/$_PROJECT_ID/$_REPO_NAME:$_REVISION_ID'
 - 'eu.gcr.io/$_PROJECT_ID/$_REPO_NAME:latest'
