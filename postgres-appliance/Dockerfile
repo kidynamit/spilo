@@ -270,6 +270,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
                 if [ "$v" != "/usr/lib/postgresql/$PGVERSION" ] && [ -f "$v/bin/$u" ]; then \
                     rm $v/bin/$u \
                     && ln -s ../../$PGVERSION/bin/$u $v/bin/$u; \
+
                 fi; \
             done; \
         done \
@@ -494,8 +495,7 @@ ENV LC_ALL=en_US.utf-8 \
     TIMESCALEDB=$TIMESCALEDB \
     DEMO=$DEMO
 
-ENV WALE_ENV_DIR=$PGHOME/etc/wal-e.d/env \
-    PGROOT=$PGHOME/pgdata/pgroot \
+ENV PGROOT=$PGHOME/pgdata/pgroot \
     LOG_ENV_DIR=$PGHOME/etc/log.d/env
 
 ENV PGDATA=$PGROOT/data \
