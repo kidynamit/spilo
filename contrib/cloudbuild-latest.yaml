@@ -10,9 +10,9 @@ steps:
   - --build-arg
   - DEMO=false
   - --build-arg
-  - PGVERSION=9.6
+  - PGVERSION=12
   - --build-arg
-  - PGOLDVERSIONS="11"
+  - PGOLDVERSIONS="9.6 11"
   - --tag
   - eu.gcr.io/$_PROJECT_ID/$_REPO_NAME:$_REVISION_ID
   - --tag
