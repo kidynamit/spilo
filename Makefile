@@ -1,4 +1,4 @@
-REVISION_ID		:= 1.6.2-build.$(shell git rev-parse --short HEAD)
+REVISION_ID		:= 1.6.3-build.$(shell git rev-parse --short HEAD)
 PROJECT_ID		:= rehive-services
 REPO_NAME		:= spilo-11
 
